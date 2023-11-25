@@ -29,7 +29,7 @@ grepz () {
   _grepLangAndTodoFiles "$@";
 }
 alias grepstu=grepz
-grep0x () {
+grepbsess () {
   _grepLangInit $__brain_roots[1]
   _grepLangAndTodoFiles "$@"
 }

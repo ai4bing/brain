@@ -9,12 +9,12 @@ todo () {
   # special comments found in program source
   local re_notes='\<\(TODO\|NOTE\|FIXME\|XXX\|HELP\|WTF\|CONTINUE\)\>'
   # default todofile
-  local todofile=$HOME/0x/todo
+  local todofile=$HOME/bsess/todo
   if [[ $1 =~ '^(-?p|(--)?pj|(--)?pwd|\.)$' ]]; then
     shift
     grep --color=auto -rn $grep_excludes[@] $re_notes . "$@"
   elif [[ $1 =~ '^(-?e|(--)?edit)$' ]]; then
-    vim $todofile
+    nvim $todofile
   else
     head -n20 $todofile
   fi

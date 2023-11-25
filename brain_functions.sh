@@ -24,7 +24,15 @@ __brain_root_edit () {
     echo -e "brain: ambiguous query result {\n$all\n}, choosing '$first'"
     f="$first"
   fi
-  "$EDITOR" "$f"
+  local sess="$__brain_session_dir/$1.vim"
+  if [[ -f "$sess" ]]; then
+      "$EDITOR" "$f" -S "$sess"
+  else
+      "$EDITOR" "$f"
+  fi
+}
+__brain_new () {
+  touch "$__brain_roots[2]/$1.brain"
 }
 __brain_pw_edit () {
   local __brain_roots=$__brain_pw_roots __brain_suffix=$__brain_pw_suffix
@@ -33,7 +41,7 @@ __brain_pw_edit () {
 __brain_session () {
   local sess="$__brain_session_dir/$1.vim"
   [[ -f "$sess" ]] || return 1
-  vim -S "$sess"
+  nvim -S "$sess"
 }
 __brain_human_files () {
   for f in $(find $__brain_human_root -type f -not \( -name '*~' -or -name '*.vcf' \) ); do
@@ -42,7 +50,7 @@ __brain_human_files () {
 }
 __brain_human_edit () {
   local file="$HOME/z/priv/misc/contact/$1"
-  vim "$file"
+  nvim "$file"
 }
 __brain_human () {
   __brain_human_edit "$@"
@@ -67,7 +75,8 @@ brain () {
   elif [[ "$arg1" =~ '^(session)$' ]]; then
     __brain_session "$@"
   elif [[ "$arg1" =~ '^(n|new)$' ]]; then
-    echo "hippocampus: long term memory failure" # XXX: implement? no need right now
+    # echo "hippocampus: long term memory failure" # XXX: implement? no need right now
+    __brain_new "$@"
   elif [[ "$arg1" =~ '^(c|contact)$' ]]; then
     __brain_human "$@"
   fi

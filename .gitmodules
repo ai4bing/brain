@@ -1,0 +1,3 @@
+[submodule "brain.vim"]
+	path = brain.vim
+	url = git@github.com:suxatcode/brain.vim.git
