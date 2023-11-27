@@ -19,7 +19,7 @@ _grepFindFilesToGrep () {
     -not -wholename '*/node_modules/*'
   )
   # TODO: reuse find.sh functions
-  local langfiles=($(find $_grepLangSearchPATH -regex ".*/$__brain_suffix"'[^/]*[^~]$\|.*'"$__brain_suffix$" $findargs))
+  local langfiles=($(find $_grepLangSearchPATH \( -regex ".*/$__brain_suffix""[^/]*[^~]$" -or -regex ".*$__brain_suffix$" \) $findargs))
   local todos=($(find $_grepLangSearchPATH -name "todo" -type f))
   for t in $todos; do langfiles+=$t; done
   #echo "XXX $langfiles" >&2
