@@ -14,7 +14,7 @@ todo () {
     shift
     grep --color=auto -rn $grep_excludes[@] $re_notes . "$@"
   elif [[ $1 =~ '^(-?e|(--)?edit)$' ]]; then
-    nvim $todofile
+    $EDITOR $todofile
   else
     head -n20 $todofile
   fi
