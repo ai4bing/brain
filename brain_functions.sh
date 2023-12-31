@@ -26,9 +26,9 @@ __brain_root_edit () {
   fi
   local sess="$__brain_session_dir/$1.vim"
   if [[ -f "$sess" ]]; then
-      $EDITOR $f -S $sess
+      $EDITOR $f -S $sess -c "autocmd VimLeave * mksession! $sess"
   else
-      $EDITOR $f
+      $EDITOR $f -c "autocmd VimLeave * mksession! $sess"
   fi
 }
 __brain_new () {
@@ -36,7 +36,7 @@ __brain_new () {
     echo "file already exists"
   else
     touch -a "${__brain_roots[2]}/$1.brain${2:+.$2}"
-    touch -a "$__brain_session_dir/$1.vim"
+    # touch -a "$__brain_session_dir/$1.vim"
   fi
 }
 __brain_pw_edit () {
