@@ -24,7 +24,7 @@ __brain_find_file__fd () {
 }
 __brain_find_file_in_path () {
   local root="$1" q="$2"
-  if which fd >/dev/null; then
+  if which fd > /dev/null; then
     __brain_find_file__fd "$root" "$q"
   else
     __brain_find_file__find "$root" "$q"
@@ -39,6 +39,12 @@ __brain_find_all () {
     else
       echo $f|sed 's,.*/\(.*\),\1,g'
     fi
+  done
+}
+__brain_list () {
+  local all=$(__brain_find_file "")
+  for f in $(echo "$all"|sed "s,:,\n,g"); do
+    echo "$f"
   done
 }
 __brain_set_roots () {
