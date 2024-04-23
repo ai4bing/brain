@@ -1,6 +1,6 @@
 #!/usr/bin/zsh
 
-__brain_directory_ignores=(.stversions docker-data node_modules)
+__brain_directory_ignores=(.stversions docker-data node_modules .brain_files)
 # TODO: fuzzy machtes?
 __brain_find_file__find () {
   local root="$1" q="$2"
@@ -13,21 +13,25 @@ __brain_find_file__find () {
   [[ $#f -eq 1 ]] || return 1
 }
 __brain_find_file__fd () {
-  local root="$1" q="$2"
+  local root="$1" q="$2" r="$3"
   local opts=($(printf ' -E "%s" ' "${__brain_directory_ignores[@]}"))
-  local f=($(fd $opts "^($__brain_suffix\.$q|$q\.$__brain_suffix)" "$root"))
+  local f=($(fd $opts "^($__brain_suffix\.$q|$q\.$__brain_suffix|$q\.$__brain_suffix\.$r)" "$root"))
   if [[ $#f -eq 0 ]]; then
-    f=($(fd $opts "^(${__brain_suffix}\.${q}[^/]*|${q}[^/]*\.${__brain_suffix})" "$root"))
+    if [[ -n "$3" ]]; then
+      f=($(fd $opts "^(${__brain_suffix}\.${q}[^/]*\.${r}|${q}[^/]*\.${__brain_suffix}\.${r})" "$root"))
+    else
+      f=($(fd $opts "^(${__brain_suffix}\.${q}[^/]*|${q}[^/]*\.${__brain_suffix})" "$root"))
+    fi
   fi
   echo "${(j/:/)f}"
   [[ $#f -eq 1 ]] || return 1
 }
 __brain_find_file_in_path () {
-  local root="$1" q="$2"
+  local root="$1" q="$2" r="$3"
   if which fd > /dev/null; then
-    __brain_find_file__fd "$root" "$q"
+    __brain_find_file__fd "$root" "$q" "$r"
   else
-    __brain_find_file__find "$root" "$q"
+    __brain_find_file__find "$root" "$q" "$r"
   fi
   return $?
 }
@@ -51,10 +55,10 @@ __brain_set_roots () {
   __brain_roots=($@)
 }
 __brain_find_file () {
-  local q="$1"
+  local q="$1" r="$2"
   local multiple=0 res=()
   for root in $__brain_roots; do
-    res+=($(__brain_find_file_in_path "$root" "$q"))
+    res+=($(__brain_find_file_in_path "$root" "$q" "$r"))
     [[ $? -eq 0 ]] || multiple=1
   done
   echo "${(j/:/)res}"
