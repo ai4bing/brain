@@ -26,10 +26,14 @@ __brain_root_edit () {
     fi
     local ff=${f##*/}
     local sess="$__brain_session_dir/${ff%%.*}_${ff##*.}.vim"
-    if [[ -f "$sess" ]]; then
-        $EDITOR $f -S "$sess" -c "autocmd VimLeave * mksession! $sess"
+    if $brain_with_session; then
+      if [[ -f "$sess" ]]; then
+          $EDITOR $f -S "$sess" -c "autocmd VimLeave * mksession! $sess"
+      else
+          $EDITOR $f -c "autocmd VimLeave * mksession! $sess"
+      fi
     else
-        $EDITOR $f -c "autocmd VimLeave * mksession! $sess"
+      vim --noplugin -i NONE --cmd 'set noswapfile' --cmd 'set nobackup' $f
     fi
 }
 __brain_new () {
@@ -41,6 +45,7 @@ __brain_new () {
 }
 __brain_pw_edit () {
     local __brain_roots=$__brain_pw_roots __brain_suffix=$__brain_pw_suffix
+    local brain_with_session=false
     __brain_root_edit "$@"
 }
 __brain_session () {
@@ -63,15 +68,15 @@ __brain_human () {
 brain () {
     if [[ $# -eq 0 ]]; then
         echo "brain"
-        echo "  e  | edit <file>     search brain for lan.<file>/<file.lang an open it"
+        echo "  e  | edit <file>     search brain for brain.<file>/<file>.brain an open it"
         echo "  n  | new  <file>     new file at ~/z/brainfiles/"
-        echo "  g  | grep <string>   grep things from files in roots"
+        echo "  g  | grep <string>   grep things from files in __brain_roots"
         echo "  f  | find <file>     find file"
         echo "  ls | list            list all brain files"
+        echo "  pw <file>            search brain for <file>.pw"
         echo ""
         echo "  ------------ NOT USED FOR ME ------------"
-        echo "  c|contact <name>     search brain for humans"
-        echo "  pw <file>            search brain for <file>.pw"
+        echo "  c  | contact <name>     search brain for humans"
         return 0
     fi
     local arg1="$1"
@@ -79,7 +84,7 @@ brain () {
     if [[ "$arg1" =~ '^(e|edit)$' ]]; then
         __brain_root_edit "$@"
     elif [[ "$arg1" =~ '^(g|grep)$' ]]; then
-        greplang "$@"
+        __brain_grep "$@"
     elif [[ "$arg1" =~ '^(pw)$' ]]; then
         __brain_pw_edit "$@"
     elif [[ "$arg1" =~ '^(session)$' ]]; then
@@ -87,7 +92,7 @@ brain () {
     elif [[ "$arg1" =~ '^(n|new)$' ]]; then
         __brain_new "$@"
     elif [[ "$arg1" =~ '^(f|find)$' ]]; then
-        __brain_list | grep "$@"
+        __brain_list | grep -i "$@"
     elif [[ "$arg1" =~ '^(ls|list)$' ]]; then
         __brain_list
     elif [[ "$arg1" =~ '^(c|contact)$' ]]; then

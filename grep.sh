@@ -5,7 +5,7 @@ source "$cwd/find.sh"
 source "$cwd/conf.sh"
 
 _grepLangGrep () {
-  grep --color=auto -nH "$@"
+  grep --color=auto -h "$1" <(grep -niH "$@" | sed 's/.*\/z\//~\/z\//')
 }
 _grepLangInit () {
   _grepLangSearchPATH=( "$@" )
@@ -36,8 +36,7 @@ grepbsess () {
   _grepLangInit $__brain_roots[1]
   _grepLangAndTodoFiles "$@"
 }
-greplang () {
+__brain_grep () {
   _grepLangInit $__brain_roots
   _grepLangAndTodoFiles "$@"
 }
-alias grepbrain='greplang'

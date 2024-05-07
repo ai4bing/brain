@@ -4,9 +4,11 @@
 __brain_suffix="brain"
 __brain_suffix2="br"
 # brain file directories (all of them will be search on every edit call)
-__brain_roots=($HOME/z/brainsess $HOME/z/brainfiles)
+__brain_roots=($HOME/z/brainfiles)
 # brain session storage directory
-__brain_session_dir=$__brain_roots[1]
+# __brain_session_dir=$__brain_roots[1]
+__brain_session_dir=$HOME/z/brainsess
+brain_with_session=true
 # brain pw directories searched for '.$__brain_pw_suffix' files
 # (encryption is on you sir..)
 __brain_pw_roots=($HOME/z/priv/misc/intl)
