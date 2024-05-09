@@ -27,10 +27,6 @@ _grepFindFilesToGrep () {
 _grepLangAndTodoFiles () {
   _grepLangGrep "$@" $(_grepFindFilesToGrep)
 }
-# grepz () {
-#   _grepLangInit $__brain_roots[2]
-#   _grepLangAndTodoFiles "$@";
-# }
 # alias grepstu=grepz
 grepbsess () {
   _grepLangInit $__brain_session_dir

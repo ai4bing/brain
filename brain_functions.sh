@@ -97,6 +97,8 @@ brain () {
         __brain_list
     elif [[ "$arg1" =~ '^(c|contact)$' ]]; then
         __brain_human "$@"
+    elif [[ "$arg1" =~ '^(todo)$' ]]; then
+        __brain_grep '\(TODO\|NOTE\|FIXME\|XXX\|HELP\|WHY\|WTF\|CONTINUE\)'
     fi
 }
 

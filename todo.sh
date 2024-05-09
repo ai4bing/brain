@@ -7,7 +7,7 @@ todo () {
     --binary-files=without-match
   )
   # special comments found in program source
-  local re_notes='\<\(TODO\|NOTE\|FIXME\|XXX\|HELP\|WTF\|CONTINUE\)\>'
+  local re_notes='\<\(TODO\|NOTE\|FIXME\|XXX\|HELP\|WHY\|WTF\|CONTINUE\)\>'
   # default todofile
   local todofile=$HOME/z/braintodo.txt
   if [[ $1 =~ '^(-?p|(--)?pj|(--)?pwd|\.)$' ]]; then
