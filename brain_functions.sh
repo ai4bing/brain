@@ -33,14 +33,14 @@ __brain_root_edit () {
           $EDITOR $f -c "autocmd VimLeave * mksession! $sess"
       fi
     else
-      vim --noplugin -i NONE --cmd 'set noswapfile' --cmd 'set nobackup' $f
+      vim -i NONE --cmd 'set noswapfile' --cmd 'set nobackup' $f
     fi
 }
 __brain_new () {
-    if [[ -f "${__brain_roots[2]}/$1.brain${2:+.$2}" ]]; then
+    if [[ -f "${__brain_roots}/$1.brain${2:+.$2}" ]]; then
         echo "file already exists"
     else
-        touch -a "${__brain_roots[2]}/$1.brain${2:+.$2}"
+        touch -a "${__brain_roots}/$1.brain${2:+.$2}"
     fi
 }
 __brain_pw_edit () {

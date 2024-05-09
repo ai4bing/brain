@@ -19,21 +19,21 @@ _grepFindFilesToGrep () {
   )
   # TODO: reuse find.sh functions
   local langfiles=($(find $_grepLangSearchPATH \( -regex ".*/$__brain_suffix""[^/]*[^~]$" -or -regex ".*$__brain_suffix$" -or -regex ".*$__brain_suffix\.[^/]*$" \) $findargs))
-  local todos=($(find $_grepLangSearchPATH -name "todo" -type f))
-  for t in $todos; do langfiles+=$t; done
+  # local todos=($(find $_grepLangSearchPATH -name "todo" -type f))
+  # for t in $todos; do langfiles+=$t; done
   #echo "XXX $langfiles" >&2
   echo "${langfiles[@]}"
 }
 _grepLangAndTodoFiles () {
   _grepLangGrep "$@" $(_grepFindFilesToGrep)
 }
-grepz () {
-  _grepLangInit $__brain_roots[2]
-  _grepLangAndTodoFiles "$@";
-}
-alias grepstu=grepz
+# grepz () {
+#   _grepLangInit $__brain_roots[2]
+#   _grepLangAndTodoFiles "$@";
+# }
+# alias grepstu=grepz
 grepbsess () {
-  _grepLangInit $__brain_roots[1]
+  _grepLangInit $__brain_session_dir
   _grepLangAndTodoFiles "$@"
 }
 __brain_grep () {

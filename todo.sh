@@ -9,7 +9,7 @@ todo () {
   # special comments found in program source
   local re_notes='\<\(TODO\|NOTE\|FIXME\|XXX\|HELP\|WTF\|CONTINUE\)\>'
   # default todofile
-  local todofile=$HOME/z/brainsess/todo
+  local todofile=$HOME/z/braintodo.txt
   if [[ $1 =~ '^(-?p|(--)?pj|(--)?pwd|\.)$' ]]; then
     shift
     grep --color=auto -rn $grep_excludes[@] $re_notes . "$@"
