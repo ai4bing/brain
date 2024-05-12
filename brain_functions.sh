@@ -37,10 +37,10 @@ __brain_root_edit () {
     fi
 }
 __brain_new () {
-    if [[ -f "${__brain_roots}/$1.brain${2:+.$2}" ]]; then
+    if [[ -f "${__brain_roots[1]}/$1.brain${2:+.$2}" ]]; then
         echo "file already exists"
     else
-        touch -a "${__brain_roots}/$1.brain${2:+.$2}"
+        touch -a "${__brain_roots[1]}/$1.brain${2:+.$2}"
     fi
 }
 __brain_pw_edit () {

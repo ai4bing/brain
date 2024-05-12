@@ -4,7 +4,7 @@
 __brain_suffix="brain"
 __brain_suffix2="br"
 # brain file directories (all of them will be search on every edit call)
-__brain_roots=($HOME/z/brainfiles)
+__brain_roots=($HOME/z/brainfiles $HOME/z/braintest)
 # brain session storage directory
 # __brain_session_dir=$__brain_roots[1]
 __brain_session_dir=$HOME/z/brainsess

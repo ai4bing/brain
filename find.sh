@@ -47,7 +47,7 @@ __brain_find_all () {
 }
 __brain_list () {
   local all=$(__brain_find_file "")
-  for f in $(echo "$all"|sed "s,:,\n,g"); do
+  for f in $(echo "$all" | sed "s,:,\n,g" | sed 's/.*\/z\//~\/z\//'); do
     echo "$f"
   done
 }
