@@ -69,11 +69,13 @@ brain () {
     if [[ $# -eq 0 ]]; then
         echo "brain"
         echo "  e  | edit <file>     search brain for brain.<file>/<file>.brain an open it"
-        echo "  n  | new  <file>     new file at ~/z/brainfiles/"
+        echo "  n  | new  <file>     new file at ~/z/brainfiles DON'T create file with space"
         echo "  g  | grep <string>   grep things from files in __brain_roots"
         echo "  f  | find <file>     find file"
+        echo "  t  | todo            find todo"
         echo "  ls | list            list all brain files"
         echo "  pw <file>            search brain for <file>.pw"
+        echo "  sync                 rsync to icloud"
         echo ""
         echo "  ------------ NOT USED FOR ME ------------"
         echo "  c  | contact <name>     search brain for humans"
@@ -87,6 +89,8 @@ brain () {
         __brain_grep "$@"
     elif [[ "$arg1" =~ '^(pw)$' ]]; then
         __brain_pw_edit "$@"
+    elif [[ "$arg1" =~ '^(sync)$' ]]; then
+        rsync -a --exclude={'priv','sess','braintodo.txt'} --delete-excluded ~/z/ ~/Library/Mobile\ Documents/com\~apple\~CloudDocs/z
     elif [[ "$arg1" =~ '^(session)$' ]]; then
         __brain_session "$@"
     elif [[ "$arg1" =~ '^(n|new)$' ]]; then
@@ -97,7 +101,7 @@ brain () {
         __brain_list
     elif [[ "$arg1" =~ '^(c|contact)$' ]]; then
         __brain_human "$@"
-    elif [[ "$arg1" =~ '^(todo)$' ]]; then
+    elif [[ "$arg1" =~ '^(t|todo)$' ]]; then
         __brain_grep '\(TODO\|NOTE\|FIXME\|XXX\|HELP\|WHY\|WTF\|CONTINUE\)'
     fi
 }
