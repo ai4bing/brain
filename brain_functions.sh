@@ -85,6 +85,7 @@ brain () {
     shift
     if [[ "$arg1" =~ '^(e|edit)$' ]]; then
         __brain_root_edit "$@"
+        rsync -a --exclude={'priv','sess','braintodo.txt'} --delete-excluded ~/z/ ~/Library/Mobile\ Documents/com\~apple\~CloudDocs/z
     elif [[ "$arg1" =~ '^(g|grep)$' ]]; then
         __brain_grep "$@"
     elif [[ "$arg1" =~ '^(pw)$' ]]; then
