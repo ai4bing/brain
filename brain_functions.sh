@@ -104,6 +104,8 @@ brain () {
         __brain_human "$@"
     elif [[ "$arg1" =~ '^(t|todo)$' ]]; then
         __brain_grep '\(TODO\|NOTE\|FIXME\|XXX\|HELP\|WHY\|WTF\|CONTINUE\)'
+    else
+        echo "Invalid usage."
     fi
 }
 
