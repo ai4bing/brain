@@ -83,7 +83,7 @@ brain () {
     fi
     local arg1="$1"
     shift
-    if [[ "$arg1" =~ '^(e|edit)$' ]]; then
+    if [[ "$arg1" =~ '^(e|edit|e1|e2|edit1|edit2)$' ]]; then
         __brain_root_edit "$@"
         rsync -a --exclude={'priv','sess','braintodo.txt'} --delete-excluded ~/z/ ~/Library/Mobile\ Documents/com\~apple\~CloudDocs/z
     elif [[ "$arg1" =~ '^(g|grep)$' ]]; then
@@ -93,7 +93,8 @@ brain () {
     elif [[ "$arg1" =~ '^(sync)$' ]]; then
         rsync -a --exclude={'priv','sess','braintodo.txt'} --delete-excluded ~/z/ ~/Library/Mobile\ Documents/com\~apple\~CloudDocs/z
     elif [[ "$arg1" =~ '^(session)$' ]]; then
-        __brain_session "$@"
+        # __brain_session "$@"
+        echo "use brain edit"
     elif [[ "$arg1" =~ '^(n|new)$' ]]; then
         __brain_new "$@"
     elif [[ "$arg1" =~ '^(f|find)$' ]]; then
@@ -101,7 +102,8 @@ brain () {
     elif [[ "$arg1" =~ '^(ls|list)$' ]]; then
         __brain_list
     elif [[ "$arg1" =~ '^(c|contact)$' ]]; then
-        __brain_human "$@"
+        # __brain_human "$@"
+        echo "deprecated"
     elif [[ "$arg1" =~ '^(t|todo)$' ]]; then
         __brain_grep '\(TODO\|NOTE\|FIXME\|XXX\|HELP\|WHY\|WTF\|CONTINUE\)'
     else
@@ -114,16 +116,28 @@ __brain_echo_line () {
     echo "ctx=$context state=$state statedescr=$state_descr line=$line"
 }
 _brain_2nd () {
-    if [[ "$line" =~ '.*(pw).*' ]]; then
-        _values 'pw files' $(ls $__brain_pw_roots/*.pw\
+    if [[ "$line" =~ '.*e1.*|.*(edit1).*' ]]; then
+        _values 'files' $(ls $__brain_roots[1]/*.brain.*\
+                |sed -e "s,$__brain_roots[1]/,,g"\
+            |sed -e "s,\(.*\).brain.*,\1,g")
+    elif [[ "$line" =~ '.*e2.*|.*(edit2).*' ]]; then
+        _values 'files' $(ls $__brain_roots[2]/*.brain.*\
+                |sed -e "s,$__brain_roots[2]/,,g"\
+            |sed -e "s,\(.*\).brain.*,\1,g")
+    elif [[ "$line" =~ '.*e.*|.*(edit).*' ]]; then
+        _values 'files' $(ls $__brain_roots[1]/*.brain.* $__brain_roots[2]/*.brain.*\
+                |sed -e "s,$__brain_roots[1]/,,g" -e "s,$__brain_roots[2]/,,g"\
+            |sed -e "s,\(.*\).brain.*,\1,g")
+    elif [[ "$line" =~ '.*(pw).*' ]]; then
+        _values 'pw files' $(ls $__brain_pw_roots/*.pw.gpg\
                 |sed -e "s,$__brain_pw_roots/,,g"\
-            |sed -e "s,\(.*\).pw,\1,g")
-    elif [[ "$line" =~ '.*(session).*' ]]; then
-        _values 'sessions' $(ls $__brain_session_dir/*.vim\
-                |sed -e "s,$__brain_session_dir/,,g"\
-            |sed -e "s,\(.*\).vim,\1,g")
-    elif [[ "$line" =~ '.*(contact).*' ]]; then
-        _values 'contact humans' $(__brain_human_files)
+            |sed -e "s,\(.*\).pw.gpg,\1,g")
+    # elif [[ "$line" =~ '.*(session).*' ]]; then
+    #     _values 'sessions' $(ls $__brain_session_dir/*.vim\
+    #             |sed -e "s,$__brain_session_dir/,,g"\
+    #         |sed -e "s,\(.*\).vim,\1,g")  # WTF not sure why doesn't this show '_txt'
+    # elif [[ "$line" =~ '.*(contact).*' ]]; then
+        # _values 'contact humans' $(__brain_human_files)
     else
         #__brain_echo_line
     fi
@@ -131,5 +145,5 @@ _brain_2nd () {
 _brain () {
     local context state state_descr line
     typeset -A opt_args
-    _arguments ":operation:(edit new grep find list session pw contact)" ":subject:_brain_2nd"
+    _arguments ":operation:(edit1 edit2 edit new grep find list pw)" ":subject:_brain_2nd"
 }
