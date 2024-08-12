@@ -85,6 +85,7 @@ brain () {
     shift
     if [[ "$arg1" =~ '^(e|edit|e1|e2|edit1|edit2)$' ]]; then
         __brain_root_edit "$@"
+        # rsync target must not contain the final slash when syncing folders, otherwise would be synced into targer folder
         rsync -a --exclude={'priv','sess','braintodo.txt'} --delete-excluded ~/z/ ~/Library/Mobile\ Documents/com\~apple\~CloudDocs/z
     elif [[ "$arg1" =~ '^(g|grep)$' ]]; then
         __brain_grep "$@"
